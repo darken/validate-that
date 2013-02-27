@@ -1,0 +1,32 @@
+{
+  "name": "validate-that",
+  "version": "0.2.0",
+  "description": "A validation package for your models.",
+  "main": "index",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darken/validate-that"
+  },
+  "keywords": [
+    "validate",
+    "validation",
+    "model",
+    "objects",
+    "simple",
+    "cool",
+    "validateThat",
+    "validate-that"
+  ],
+  "author": "Gustavo Rodríguez <darken.dev@gmail.com>",
+  "license": "BSD",
+  "devDependencies": {
+      "chai": "*",
+      "mocha": "*"
+  }
+}
