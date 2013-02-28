@@ -212,52 +212,31 @@ describe('validator', function() {
     describe('with a primitive value', function() {
       var validator = validateThat().email();
 
+      function assertNoErrors(value) {
+        validator.validate(value);
+        validator.errors.length.should.be.equal(0);
+      }
+
       it('that is valid should have no errors', function() {
-        var value = 'ex4mpl3@exampl3.com.co';
-        validator.validate(value);
-        validator.errors.length.should.be.equal(0);
-
-        value = 'darken.dev@gmail.com';
-        validator.validate(value);
-        validator.errors.length.should.be.equal(0);
-
-        value = 'da/rken.dev@gmail.com';
-        validator.validate(value);
-        validator.errors.length.should.be.equal(0);
+        assertNoErrors('ex4mpl3@exampl3.com.co');
+        assertNoErrors('darken.dev@gmail.com');
+        assertNoErrors('da/rken.dev@gmail.com');
       });
 
+      function assertWrongEmail(email) {
+        validator.validate(email);
+        validator.errors.should.be.eql([ error('email', email) ]);
+      }
+
       it('that is not valid should have one error', function() {
-        var value = '@example.com.co';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = 1337;
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = 'example@gmail.c';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = 'darken@';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = 'example@.';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = 'da\\ken@gmail.com';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = '';
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
-
-        value = false;
-        validator.validate(value);
-        validator.errors.should.be.eql([ error('email', value) ]);
+        assertWrongEmail('@example.com.co');
+        assertWrongEmail(1337);
+        assertWrongEmail('example@gmail.c');
+        assertWrongEmail('darken@');
+        assertWrongEmail('example@.');
+        assertWrongEmail('da\\ken@gmail.com');
+        assertWrongEmail('');
+        assertWrongEmail(false);
       });
     });
 
