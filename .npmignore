@@ -1,4 +1,5 @@
 test
+bin
 .git*
 .DS_Store
 *.swp
