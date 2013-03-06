@@ -1,6 +1,6 @@
 {
   "name": "validate-that",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A validation package for your models.",
   "main": "index",
   "directories": {
