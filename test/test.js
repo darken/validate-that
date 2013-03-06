@@ -86,19 +86,37 @@ describe('validateThat(data, true)', function() {
 describe('validator', function() {
   describe('#anyCheck()', function() {
     describe('for an object value', function() {
-      var value = { email:"darken.dev@gmail.com", e:"node.js", nums:[0,1,2] };
-
       describe('with a props argument = { exclude: propsExcludedArray },', function() {
+        var value = { email:"darken.dev@gmail.com", e:"node.js", nums:[0,1,2] };
+
         describe('excludes from validation', function() {
           it('none property, if the array is empty', function() {
             var validator = validateThat(value).prop({ exclude: [] }).notEmpty().email();
             validator.errors.email.length.should.be.equal(2);
           });
-          
           it('the properties defined in the array', function() {
             var validator = validateThat(value).prop({ exclude: ['nums'] }).notEmpty().email();
             validator.errors.email.length.should.be.equal(1);
           });
+        });
+      });
+
+      describe('with a "dot-syntax string path" prop argument like "a.b.c",', function() {
+        var value = {
+          a:{ aa:{ aaa:[0,'xyz'], aab:'abc@abc.com'}, ab:1 },
+          b:{ ba:8, bb:{ bba:{ bbaa:'12345', bbab:null } } }
+        };
+
+        it('must go through the path until last property to validate its value', function() {
+          var validator = validateThat(value).prop('b.bb.bba.bbaa').notEmpty().email();
+          validator.errors.should.be.eql(errs('email', value.b.bb.bba.bbaa, 'b.bb.bba.bbaa')());
+
+          validator = validateThat(value).maxLength(10, 'a.aa.aab').email('a.aa.aab');
+          validator.errors.should.be.eql(errs('maxLength', value.a.aa.aab, 'a.aa.aab', [10])());
+
+          validator = validateThat().notEmpty('b.ba.baa', 'a.aa.aaa.1', 'b.bb.bba.bbab.x').validate(value);
+          validator.errors.should.be.eql(errs('notEmpty', undefined, 'b.ba.baa')
+                                         ('notEmpty', null, 'b.bb.bba.bbab.x')());
         });
       });
     });
